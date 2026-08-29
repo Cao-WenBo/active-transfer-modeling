@@ -1,0 +1,34 @@
+{
+  "protocol_version": "ATM_v4",
+  "equation": "Linear ODE / Antiderivative",
+  "entrypoint": "atm.py",
+  "network": [1, 20, 20, 20, 20, 1],
+  "source_dtype": "float32",
+  "transfer_dtype": "float64",
+  "source_training": {
+    "optimizer": "full-batch_L-BFGS",
+    "outer_steps": 30,
+    "max_iter_per_outer": 300,
+    "resample_each_outer": false,
+    "boundary_points": 1,
+    "residual_points": 1000
+  },
+  "lst": {
+    "rank": 40,
+    "oversample": 20,
+    "rcond": 1e-15,
+    "coordinate_channels": ["u", "u_x"],
+    "solver": "direct_lstsq"
+  },
+  "sets": {
+    "initial_source": 0,
+    "candidates": "seeds 101..200",
+    "tests": "seeds 1..100",
+    "disjoint": true
+  },
+  "routing": "candidate minimum-loss cache; deployment top1 nearest candidate -> cached source",
+  "stopping": "candidate P90 loss; keep current stage and stop when nonnegative improvement < 10%",
+  "error": "uniform-grid relative L2",
+  "timing": "online includes routing, assembly, solve and residual loss; excludes truth error",
+  "formal_result": "results/atm/published_summary.json"
+}

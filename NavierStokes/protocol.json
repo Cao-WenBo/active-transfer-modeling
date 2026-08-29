@@ -1,0 +1,47 @@
+{
+  "protocol_version": "ATM_v4",
+  "equation": "Navier-Stokes / Kolmogorov flow",
+  "entrypoint": "atm.py",
+  "network": [256, 32, 32, 32, 32, 32, 32, 2],
+  "embedding": "Fourier features, dimension 256",
+  "source_dtype": "float32",
+  "transfer_dtype": "strict_float32_no_TF32",
+  "condition_generation": {
+    "sampler": "periodic Gaussian random field",
+    "grf_alpha": 2.5,
+    "grf_tau": 3.0,
+    "burn_in_time": 0.0
+  },
+  "source_training": {
+    "optimizer": "L-BFGS",
+    "outer_steps": 30,
+    "max_iter_per_outer": 500,
+    "resample_each_outer": true,
+    "initial_points": 3000,
+    "residual_points": 20000
+  },
+  "lst": {
+    "response": ["u", "v", "w"],
+    "response_basis_points": "10000 random space-time points",
+    "basis_point_seed": 2027,
+    "rank": 5000,
+    "oversample": 20,
+    "space_points": "64x64 full uniform grid",
+    "time_levels": 65,
+    "coordinate_channels": ["u", "v", "w", "w_x", "w_y", "w_xx", "w_yy", "div"],
+    "initial_ridge": 0.01,
+    "time_step_solver": "one damped GN update, mu=10, Cholesky"
+  },
+  "sets": {
+    "initial_source": 0,
+    "candidates": "seeds 101..200",
+    "tests": "seeds 1..100",
+    "disjoint": true
+  },
+  "routing": "candidate minimum time-marching-loss cache; deployment top1 nearest candidate -> cached source",
+  "stopping_loss": "mean of 64 equal-weight vorticity/divergence residual MSE values; initial projection excluded",
+  "stopping": "candidate P90 loss; keep current stage and stop when nonnegative improvement < 10%",
+  "primary_error": "global space-time [u,v,w] relative L2",
+  "timing": "online includes routing, assembly, time marching solve and residual loss; excludes truth error",
+  "formal_result": "results/atm/published_summary.json"
+}

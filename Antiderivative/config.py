@@ -1,0 +1,35 @@
+from pathlib import Path
+import torch
+
+ROOT = Path(__file__).resolve().parent
+CASE_CACHE = ROOT / "case_cache"
+SOURCE_ROOT = ROOT / "sources"
+OUTPUT_ROOT = ROOT / "results" / "atm"
+
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+LAYERS = [1, 20, 20, 20, 20, 1]
+SOURCE_DTYPE = torch.float32
+TRANSFER_DTYPE = torch.float64
+
+SEED = 0
+BASIS_SEED_BASE = 100000
+LENGTH_SCALE = 0.2
+M = 100
+N_REF = 100
+INIT_SOURCE_SEED = 0
+TARGET_SEEDS = list(range(1, 101))
+NUM_CANDIDATES = 100
+CANDIDATE_POOL_SEED = 0
+MAX_SOURCES = 5
+
+P_TRAIN = 1
+Q_TRAIN = 1000
+SOURCE_OUTER_STEPS = 30
+LBFGS_MAX_ITER = 300
+LBFGS_RESAMPLE = False
+
+RANK = 40
+OVERSAMPLE = 20
+CHUNK_SIZE = 64
+LSTSQ_RCOND = 1e-15
+STOPPING_THRESHOLD = 0.10

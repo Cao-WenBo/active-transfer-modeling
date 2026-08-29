@@ -1,0 +1,16 @@
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/sources*/
+**/caches*/
+**/case_cache*/
+**/CaseCache*/
+**/*.log
+**/*.pid
+**/results/atm/atm_results.pt
+**/results/atm/stage*.pt
+**/results/atm/stage*_summary.json
+**/results/atm/final_summary.json
+**/results/random_lst/checkpoint.json
+**/results/random_lst/result.json
+**/data/Burger.mat
